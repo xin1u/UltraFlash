@@ -35,6 +35,13 @@ conda activate ultraflash
 cd inference
 pip install -r requirements.txt
 pip install flash-attn --no-build-isolation
+
+# Block Sparse Attention (CUDA kernel, required for SR DiT)
+git clone https://github.com/mit-han-lab/Block-Sparse-Attention.git
+cd Block-Sparse-Attention
+pip install -e .
+cd ..
+
 python setup.py develop
 ```
 

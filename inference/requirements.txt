@@ -17,3 +17,6 @@ av>=13.1.0
 sentencepiece
 huggingface_hub[cli]
 torchao
+lmdb
+decord
+pyiqa
