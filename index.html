@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions. The first framework achieving real-time 1K (~30 FPS) and 2K (~18 FPS) streaming video generation on a single GPU.">
+    <meta name="keywords" content="Ultra Flash, Video Generation, Streaming, Real-Time, High-Resolution, Super-Resolution, NeurIPS 2026, Diffusion Model, Autoregressive Video Generation">
+    <meta name="author" content="Luxury, Jie Huang, Zihao Fan, Xiaoxiao Ma, Yuming Li, Siming Fu, Jun-hao Zhuang, Zeyue Xue, Haoran Li, Haoyang Huang, Nan Duan">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://xin1u.github.io/UltraFlash/">
+    <title>Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions</title>
+
+    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+    <meta property="og:title" content="Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions">
+    <meta property="og:description" content="The first framework achieving real-time 1K (~30 FPS) and 2K (~18 FPS) streaming video generation on a single GPU through cascaded causal streaming architecture.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xin1u.github.io/UltraFlash/">
+    <meta property="og:image" content="https://xin1u.github.io/UltraFlash/assets/intro_full.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions">
+    <meta name="twitter:description" content="Real-time 1K (~30 FPS) and 2K (~18 FPS) streaming video generation on a single GPU.">
+    <meta name="twitter:image" content="https://xin1u.github.io/UltraFlash/assets/intro_full.png">
+
+    <!-- Structured Data for Google (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions",
+        "headline": "Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions",
+        "description": "The first framework achieving real-time high-resolution streaming video generation, producing 1K video at ~30 FPS and 2K video at ~18 FPS on a single GPU.",
+        "author": [
+            {"@type": "Person", "name": "Luxury"},
+            {"@type": "Person", "name": "Jie Huang"},
+            {"@type": "Person", "name": "Zihao Fan"},
+            {"@type": "Person", "name": "Xiaoxiao Ma"},
+            {"@type": "Person", "name": "Yuming Li"},
+            {"@type": "Person", "name": "Siming Fu"},
+            {"@type": "Person", "name": "Jun-hao Zhuang"},
+            {"@type": "Person", "name": "Zeyue Xue"},
+            {"@type": "Person", "name": "Haoran Li"},
+            {"@type": "Person", "name": "Haoyang Huang"},
+            {"@type": "Person", "name": "Nan Duan"}
+        ],
+        "url": "https://xin1u.github.io/UltraFlash/",
+        "datePublished": "2026"
+    }
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'grotesk': ['"Space Grotesk"', 'sans-serif'],
+                        'mono': ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Space Grotesk', sans-serif; }
+        section[id] { scroll-margin-top: 3.5rem; }
+
+        /* Scroll-to-top button */
+        #scroll-top-btn {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        #scroll-top-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Nav transitions */
+        #top-nav.scrolled {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom-color: #e5e7eb;
+        }
+        #top-nav.scrolled .nav-brand {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #top-nav.scrolled .nav-link {
+            color: #4b5563;
+        }
+        #top-nav.scrolled .nav-link:hover {
+            color: #2563eb;
+        }
+        #top-nav.scrolled #dark-toggle i {
+            color: #4b5563;
+        }
+        html.dark #top-nav.scrolled {
+            background-color: rgba(17, 24, 39, 0.9);
+            border-bottom-color: #374151;
+        }
+        html.dark #top-nav.scrolled .nav-brand {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        html.dark #top-nav.scrolled .nav-link {
+            color: #d1d5db;
+        }
+        html.dark #top-nav.scrolled .nav-link:hover {
+            color: #93c5fd;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Fade-in animation */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Video grid */
+        .video-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        .video-card video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .video-card .prompt-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 2rem 0.8rem 0.8rem;
+            color: white;
+            font-size: 0.75rem;
+            line-height: 1.3;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .video-card:hover .prompt-overlay {
+            opacity: 1;
+        }
+
+        /* Hero video */
+        #hero-video-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        #hero-video-container video {
+            width: 100%;
+            display: block;
+        }
+
+        /* Table styles */
+        .data-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.82rem;
+        }
+        .data-table thead th {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            padding: 0.6rem 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 0.78rem;
+        }
+        .data-table tbody td {
+            padding: 0.5rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+            color: #4b5563;
+        }
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+        .data-table .method-name {
+            text-align: left;
+            font-weight: 500;
+            padding-left: 0.8rem;
+            color: #111827;
+        }
+        .data-table .row-ours {
+            background: #eff6ff;
+            font-weight: 700;
+        }
+        .data-table .row-ours td {
+            color: #1e40af;
+            border-bottom: none;
+        }
+        .data-table .best {
+            color: #2563eb;
+            font-weight: 700;
+        }
+        .data-table .section-label td {
+            background: #f3f4f6;
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.4rem;
+        }
+
+        /* BibTeX */
+        .bibtex-block {
+            position: relative;
+        }
+        .bibtex-block .copy-btn {
+            position: absolute;
+            top: 0.8rem;
+            right: 0.8rem;
+            background: #e5e7eb;
+            border: none;
+            color: #374151;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.2s;
+        }
+        .bibtex-block .copy-btn:hover {
+            background: #d1d5db;
+            color: #111827;
+        }
+
+        /* Medium-zoom background */
+        .medium-zoom-overlay {
+            background: rgba(0, 0, 0, 0.75) !important;
+            z-index: 100 !important;
+        }
+        .medium-zoom-image--opened {
+            z-index: 101 !important;
+        }
+
+        /* Hover float effect for figures */
+        img[data-zoomable] {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        img[data-zoomable]:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ===== Dark Mode ===== */
+        html.dark body {
+            background-color: #111827;
+            color: #e5e7eb;
+        }
+        html.dark .bg-gray-50,
+        html.dark section.bg-gray-50 {
+            background-color: #1f2937 !important;
+        }
+        html.dark .bg-white {
+            background-color: #111827 !important;
+        }
+        html.dark #top-nav {
+            background-color: rgba(17, 24, 39, 0.8);
+            border-bottom-color: #374151;
+        }
+        html.dark #top-nav a,
+        html.dark #top-nav .text-gray-600 {
+            color: #d1d5db;
+        }
+        html.dark #top-nav a:hover {
+            color: #93c5fd;
+        }
+        html.dark .text-gray-900 { color: #f3f4f6 !important; }
+        html.dark .text-gray-800 { color: #e5e7eb !important; }
+        html.dark .text-gray-700 { color: #d1d5db !important; }
+        html.dark .text-gray-600 { color: #9ca3af !important; }
+        html.dark .text-gray-500 { color: #9ca3af !important; }
+        html.dark .text-gray-400 { color: #6b7280 !important; }
+        html.dark .border-gray-200 { border-color: #374151 !important; }
+        html.dark .border-gray-300 { border-color: #4b5563 !important; }
+        html.dark .data-table tbody td {
+            border-bottom-color: #374151;
+            color: #d1d5db;
+        }
+        html.dark .data-table tbody tr:hover {
+            background: #1f2937;
+        }
+        html.dark .data-table .method-name {
+            color: #f3f4f6;
+        }
+        html.dark .data-table .row-ours {
+            background: #1e3a5f;
+        }
+        html.dark .data-table .row-ours td {
+            color: #93c5fd;
+        }
+        html.dark .data-table .section-label td {
+            background: #1f2937;
+            color: #9ca3af;
+        }
+        html.dark .data-table .best {
+            color: #60a5fa;
+        }
+        html.dark a[class*="border-gray-300"] {
+            background-color: #1f2937;
+            border-color: #4b5563;
+            color: #d1d5db;
+        }
+        html.dark a[class*="border-gray-300"]:hover {
+            border-color: #60a5fa;
+            color: #93c5fd;
+        }
+        html.dark footer,
+        html.dark .bg-gray-100 {
+            background-color: #1f2937 !important;
+        }
+        html.dark .bibtex-block .copy-btn {
+            background: #374151;
+            color: #d1d5db;
+        }
+        html.dark .bibtex-block .copy-btn:hover {
+            background: #4b5563;
+            color: #f3f4f6;
+        }
+        html.dark #scroll-top-btn {
+            background-color: #374151;
+            color: #d1d5db;
+            border-color: #4b5563;
+        }
+        html.dark #scroll-top-btn:hover {
+            background-color: #4b5563;
+        }
+        html.dark .video-card {
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        }
+        html.dark .video-card:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        }
+        html.dark #hero-video-container {
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+<!-- Top Navigation Bar -->
+<nav id="top-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
+        <a href="#" class="font-bold text-lg text-white nav-brand">Ultra Flash</a>
+        <div class="flex items-center gap-6">
+            <a href="#abstract" class="text-sm font-medium text-gray-200 hover:text-blue-300 transition-colors hidden md:inline nav-link">Abstract</a>
+            <a href="#method" class="text-sm font-medium text-gray-200 hover:text-blue-300 transition-colors hidden md:inline nav-link">Method</a>
+            <a href="#results" class="text-sm font-medium text-gray-200 hover:text-blue-300 transition-colors hidden md:inline nav-link">Results</a>
+            <a href="#gallery" class="text-sm font-medium text-gray-200 hover:text-blue-300 transition-colors hidden md:inline nav-link">Gallery</a>
+            <button id="dark-toggle" class="ml-2 p-2 rounded-full hover:bg-white/20 transition-colors" aria-label="Toggle dark mode">
+                <i class="fas fa-moon text-gray-200"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================================
+     1. Hero Section with Video Background
+     ============================================ -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Background Video -->
+    <video id="hero-bg-video" class="absolute inset-0 w-full h-full object-cover" style="filter: contrast(1.08) saturate(1.1) brightness(1.02);" autoplay muted playsinline>
+        <source src="asset/A close-up shot of a confident fashion influencer in a chic winter outfit, posing for a photo shoot.-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+    </video>
+    <!-- Dark overlay for text readability -->
+    <div class="absolute inset-0 bg-black/40"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-4xl mx-auto text-center px-4 py-20">
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-4 flex flex-col items-center gap-2">
+            <span class="text-white" style="-webkit-text-fill-color: white; background: none;">Ultra Flash</span>
+            <span class="text-2xl md:text-3xl font-semibold text-gray-100 tracking-tight leading-snug mt-2">
+                Scaling <span class="text-blue-300">Real-Time</span> Streaming Video Generation
+                <br>to <span class="text-purple-300">High Resolutions</span>
+            </span>
+        </h1>
+
+        <!-- Venue Badge (uncomment after acceptance)
+        <span class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold px-4 py-1.5 rounded-full mb-2 mt-2">
+            NeurIPS 2026
+        </span>
+        -->
+
+        <!-- Authors -->
+        <div class="mt-4 space-y-2">
+            <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-base text-gray-200">
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Luxury</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Jie Huang</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Zihao Fan</a><sup class="text-gray-400 text-xs">2</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Xiaoxiao Ma</a><sup class="text-gray-400 text-xs">2</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Yuming Li</a><sup class="text-gray-400 text-xs">3</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Siming Fu</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Jun-hao Zhuang</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-base text-gray-200 font-semibold">
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Zeyue Xue</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Haoran Li</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Haoyang Huang</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Nan Duan</a><sup class="text-gray-400 text-xs">1</sup></span>
+            </div>
+            <p class="text-gray-300 text-sm">
+                <sup>1</sup> JD Explore Academy &nbsp;&nbsp; <sup>2</sup> University of Science and Technology of China (USTC) &nbsp;&nbsp; <sup>3</sup> Peking University
+            </p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap justify-center gap-3 mt-8">
+            <a href="#" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all">
+                <i class="fas fa-file-pdf"></i> Paper
+            </a>
+            <a href="#" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 hover:border-white/50 hover:shadow-md transition-all">
+                <i class="fab fa-github"></i> Code
+            </a>
+            <a href="#" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 hover:border-white/50 hover:shadow-md transition-all">
+                <i class="fas fa-cube"></i> Model
+            </a>
+        </div>
+
+        <!-- Subtle hint that this IS the generated video -->
+        <p class="mt-10 text-xs text-gray-400 tracking-wide uppercase">
+            <i class="fas fa-video mr-1"></i> Background: 2K video generated in real-time by Ultra Flash
+        </p>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+        <i class="fas fa-chevron-down text-white/60 text-xl"></i>
+    </div>
+</section>
+
+<!-- ============================================
+     3. TL;DR
+     ============================================ -->
+<section class="pb-12 px-4">
+    <div class="max-w-3xl mx-auto text-center fade-in-up">
+        <p class="text-lg md:text-xl text-gray-600 leading-relaxed">
+            <span class="font-semibold text-gray-900">Ultra Flash</span> is the first framework to achieve real-time high-resolution streaming video generation &mdash; producing 1K video at ~30 FPS and 2K video at ~18 FPS on a single GPU through cascaded causal streaming architecture.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================
+     4. Key Stats
+     ============================================ -->
+<section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 fade-in-up">
+            <div class="text-center p-4">
+                <div class="text-3xl font-bold gradient-text" data-count-to="30" data-prefix="~" data-suffix=" FPS">~0 FPS</div>
+                <div class="text-sm font-medium text-gray-700 mt-1">1K Resolution</div>
+                <div class="text-xs text-gray-400">960&times;1664</div>
+            </div>
+            <div class="text-center p-4">
+                <div class="text-3xl font-bold gradient-text" data-count-to="18" data-prefix="~" data-suffix=" FPS">~0 FPS</div>
+                <div class="text-sm font-medium text-gray-700 mt-1">2K Resolution</div>
+                <div class="text-xs text-gray-400">1440&times;2496</div>
+            </div>
+            <div class="text-center p-4">
+                <div class="text-3xl font-bold gradient-text" data-count-to="1" data-suffix=" GPU">0 GPU</div>
+                <div class="text-sm font-medium text-gray-700 mt-1">Single Device</div>
+                <div class="text-xs text-gray-400">B200 / H200</div>
+            </div>
+            <div class="text-center p-4">
+                <div class="text-3xl font-bold gradient-text" data-count-to="4" data-suffix=" Steps">0 Steps</div>
+                <div class="text-sm font-medium text-gray-700 mt-1">Denoising</div>
+                <div class="text-xs text-gray-400">Single-step SR</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     5. Abstract
+     ============================================ -->
+<section id="abstract" class="py-16 px-4">
+    <div class="max-w-4xl mx-auto fade-in-up">
+        <h2 class="text-3xl font-bold text-center mb-8">Abstract</h2>
+        <p class="text-gray-600 leading-relaxed text-justify">
+            While recent autoregressive video diffusion models achieve remarkable streaming quality, they remain confined to low resolutions (<em>e.g.</em>, 480P), leaving efficient, scalable, real-time high-resolution video generation a fundamental open challenge. To bridge this gap, we present <strong class="text-gray-900">Ultra Flash</strong>, a cascaded streaming framework capable of real-time high-resolution video generation. Ultra Flash achieves <strong class="text-gray-900">~30 FPS at 1K resolution</strong> and <strong class="text-gray-900">~18 FPS at 2K resolution</strong> on a single GPU through three key contributions: (1) an architecture-preserving T2V-to-TV2V super-resolution training paradigm coupled with an AIGC-oriented data degradation pipeline that effectively preserves the generative capability of the base model; (2) a causal streaming latent upsampler paired with a high-resolution decoder, which enhances spatiotemporal coherence while enabling efficient latent spatial scaling; and (3) a cascade high-resolution streaming video generation optimization scheme that performs hybrid-reward-enhanced sparse causalization and single-step distillation, then introduces cascaded streaming self-forcing preference optimization with dynamic cache management, jointly enhancing overall coherence, improving quality, and enabling real-time streaming.
+        </p>
+        <!-- Intro Figure -->
+        <div class="mt-10 fade-in-up">
+            <img src="assets/intro_full.png" alt="Ultra Flash overview: framework and quality-speed comparison" class="w-full max-w-5xl mx-auto">
+            <p class="text-center text-sm text-gray-500 mt-4">
+                <strong>(a)</strong> Ultra Flash: Real-Time &amp; High-Resolution streaming framework. <strong>(b)</strong> Quality&ndash;speed comparison with prior methods.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     6. Key Features (3 cards)
+     ============================================ -->
+<section class="py-16 px-4 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-4 fade-in-up">Key Contributions</h2>
+        <p class="text-gray-500 text-center mb-10 max-w-2xl mx-auto fade-in-up">Three core innovations that enable real-time high-resolution streaming video generation.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in-up">
+            <div class="bg-gray-50 rounded-xl p-6 pl-7 border-l-4 border-blue-600 hover:shadow-lg transition-shadow">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">T2V-to-TV2V SR Training</h3>
+                <p class="text-sm text-gray-600 leading-relaxed">Architecture-preserving paradigm that converts any pre-trained T2V model into a generative super-resolution model without modification, with AIGC-oriented degradation.</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-6 pl-7 border-l-4 border-purple-600 hover:shadow-lg transition-shadow">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Causal Streaming Upsampler</h3>
+                <p class="text-sm text-gray-600 leading-relaxed">Ultralight causal memory network (~2M params) that upsamples latents with spatiotemporal coherence, adding &lt;5% pipeline overhead.</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-6 pl-7 border-l-4 border-indigo-600 hover:shadow-lg transition-shadow">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Cascaded Streaming Optimization</h3>
+                <p class="text-sm text-gray-600 leading-relaxed">Hybrid-reward sparse distillation + cascaded DPO preference optimization + dynamic cache management for real-time inference.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     7. Method
+     ============================================ -->
+<section id="method" class="py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12 fade-in-up">Method</h2>
+
+        <!-- Method Pipeline Figure -->
+        <div class="fade-in-up">
+            <img src="assets/pipeline.png" alt="Ultra Flash Training and Optimization Pipeline" class="w-full">
+            <p class="text-center text-sm text-gray-500 mt-4 max-w-5xl mx-auto">
+                <strong>(a)</strong> T2V-to-TV2V SR Training. <strong>(b)</strong> Causal Latent Upsampler &amp; High-Resolution Decoder. <strong>(c)</strong> Hybrid-Reward-Enhanced Sparse Causalization and Single-Step Distillation. <strong>(d)</strong> Cascade High-Resolution Streaming Video Generation Optimization.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     8. Results
+     ============================================ -->
+<section id="results" class="py-16 px-4 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-10 fade-in-up">Results</h2>
+
+        <!-- Efficiency Table -->
+        <div class="fade-in-up">
+            <p class="text-center text-sm font-semibold text-gray-700 mb-3">Efficiency Comparison</p>
+            <div class="overflow-x-auto rounded-xl shadow-sm border border-gray-200 bg-white">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="method-name !text-left !pl-4">Method</th>
+                            <th>Resolution</th>
+                            <th>Steps</th>
+                            <th>Throughput (FPS) &uarr;</th>
+                            <th>Latency (ms) &darr;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="method-name">CausVid</td>
+                            <td>480&times;832</td><td>4</td><td>24.4</td><td>123</td>
+                        </tr>
+                        <tr>
+                            <td class="method-name">Self Forcing</td>
+                            <td>480&times;832</td><td>4</td><td>32.0</td><td>125</td>
+                        </tr>
+                        <tr>
+                            <td class="method-name">Causal Forcing</td>
+                            <td>480&times;832</td><td>4</td><td>31.2</td><td>128</td>
+                        </tr>
+                        <tr>
+                            <td class="method-name">DummyForcing</td>
+                            <td>480&times;832</td><td>4</td><td>28.0</td><td>143</td>
+                        </tr>
+                        <tr>
+                            <td class="method-name">Self Forcing + FlashVSR</td>
+                            <td>768&times;1408</td><td>5</td><td>8.0</td><td>500</td>
+                        </tr>
+                        <tr class="row-ours">
+                            <td class="method-name">Ultra Flash (Ours)</td>
+                            <td class="best">960&times;1664 (1K)</td><td>4</td><td class="best">30.0</td><td class="best">40</td>
+                        </tr>
+                        <tr class="row-ours">
+                            <td class="method-name">Ultra Flash (Ours)</td>
+                            <td class="best">1440&times;2496 (2K)</td><td>4</td><td>18.0</td><td>67</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     9. Video Gallery
+     ============================================ -->
+<section id="gallery" class="bg-gray-50 py-16 px-4">
+    <div class="max-w-full mx-auto px-4 md:px-8">
+        <h2 class="text-3xl font-bold text-center mb-4 fade-in-up">Gallery</h2>
+        <p class="text-gray-500 text-center mb-10 fade-in-up">Real-time 2K streaming video generation results. Hover to see the text prompt.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 fade-in-up" id="video-grid">
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A child in a cozy winter outfit, blowing gently on a steaming mug of hot cocoa to cool it down. The -0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A child in a cozy winter outfit, blowing gently on a steaming mug of hot cocoa to cool it down.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A cinematic closeup and detailed portrait of a reindeer standing in a snowy forest at sunset. The li-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A cinematic closeup and detailed portrait of a reindeer standing in a snowy forest at sunset.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A cinematic over-the-shoulder shot of a writer sitting at a cluttered desk, lost in thought as they -0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A cinematic over-the-shoulder shot of a writer sitting at a cluttered desk, lost in thought as they gaze out the window.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A close-up portrait of a woman, her face illuminated by the side lighting, capturing her delicate fe-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A close-up portrait of a woman, her face illuminated by the side lighting, capturing her delicate features.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A close-up shot of a futuristic cybernetic German Shepherd, showcasing its striking brown and black -0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A close-up shot of a futuristic cybernetic German Shepherd, showcasing its striking brown and black metallic features.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A cyberpunk-style digital illustration of a metal skull growing muscle tendons and flesh, set in a d-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A cyberpunk-style digital illustration of a metal skull growing muscle tendons and flesh, set in a dark futuristic laboratory.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A cyberpunk-style illustration depicting a lone robot navigating a neon-lit cityscape. The robot sta-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A cyberpunk-style illustration depicting a lone robot navigating a neon-lit cityscape.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A detailed and warm moment captured in a traditional Chinese ink wash painting style, featuring a mo-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A detailed and warm moment captured in a traditional Chinese ink wash painting style.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A detailed illustration in a realistic style depicting a raccoon wearing a classic detective's hat, -0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A detailed illustration in a realistic style depicting a raccoon wearing a classic detective's hat.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A close-up shot of a confident fashion influencer in a chic winter outfit, posing for a photo shoot.-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A close-up shot of a confident fashion influencer in a chic winter outfit, posing for a photo shoot.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A close-up shot of a woman gently kissing a baby on the cheek, leaving a subtle lipstick mark. The w-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A close-up shot of a woman gently kissing a baby on the cheek, leaving a subtle lipstick mark.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A scientific laboratory scene in a detailed digital painting style, featuring a panda wearing a whit-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A scientific laboratory scene in a detailed digital painting style, featuring a panda wearing a white lab coat.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A close-up shot of a stunning diamond ring, showcasing its intricate facets and brilliant cut. The r-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A close-up shot of a stunning diamond ring, showcasing its intricate facets and brilliant cut.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A vintage film-style photograph captures a moment between two women, one whispering a secret into th-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A vintage film-style photograph captures a moment between two women, one whispering a secret into the other's ear.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A close-up shot of a young woman deeply engrossed in solving a complex puzzle, her forehead creased -0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A close-up shot of a young woman deeply engrossed in solving a complex puzzle, her forehead creased in concentration.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A melancholic scene from a vintage film-style photograph captures a woman's lips trembling with sadn-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A melancholic scene from a vintage film-style photograph captures a woman's lips trembling with sadness.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A close-up shot of a Victoria crowned pigeon in a naturalistic wildlife photography style, showcasin-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A close-up shot of a Victoria crowned pigeon in a naturalistic wildlife photography style, showcasing its elegant blue feathers.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A Japanese animated film-style scene of a young woman standing on a ship, looking back at the camera-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A Japanese animated film-style scene of a young woman standing on a ship, looking back at the camera with wind in her hair.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A close-up of honey being drizzled onto pancakes, the thick golden liquid flowing slowly and smoothl-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A close-up of honey being drizzled onto pancakes, the thick golden liquid flowing slowly and smoothly.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A serene mountain lake at night, reflecting a starry sky, with a small boat gliding silently across -0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A serene mountain lake at night, reflecting a starry sky, with a small boat gliding silently across the water.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A dramatic space scene in the style of a sci-fi movie poster, featuring a sleek silver spaceship bei-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A dramatic space scene in the style of a sci-fi movie poster, featuring a sleek silver spaceship being pulled into a black hole.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A dynamic and explosive basketball moment captured in a high-energy action style, showcasing a baske-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A dynamic and explosive basketball moment captured in a high-energy action style, showcasing a basketball player dunking.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A fantastical aerial landscape in the style of a high-fantasy illustration, depicting a floating isl-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A fantastical aerial landscape in the style of a high-fantasy illustration, depicting a floating island with waterfalls cascading into clouds.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A vibrant and lively vlog-style photo of a corgi in tropical Maui, showcasing the dog energetically -0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A vibrant and lively vlog-style photo of a corgi in tropical Maui, showcasing the dog energetically playing on the beach.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/An arc shot around a couple standing under a blooming cherry blossom tree, with petals gently fallin-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">An arc shot around a couple standing under a blooming cherry blossom tree, with petals gently falling around them.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A surreal and dreamlike scene in the style of a cyberpunk film, depicting New York City submerged un-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A surreal and dreamlike scene in the style of a cyberpunk film, depicting New York City submerged underwater.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A post-apocalyptic city scene in a gritty, realistic style, where nature has reclaimed the urban lan-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A post-apocalyptic city scene in a gritty, realistic style, where nature has reclaimed the urban landscape.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A dramatic landscape painting in the style of a Chinese ink wash, depicting a vast desert with tower-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A dramatic landscape painting in the style of a Chinese ink wash, depicting a vast desert with towering sand dunes.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A vibrant anime illustration in a dynamic, thick-line painting style of a young girl blowing a kiss -0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A vibrant anime illustration in a dynamic, thick-line painting style of a young girl blowing a kiss.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A slow-motion video captures a drop of liquid mercury, gleaming with a silvery sheen, bouncing grace-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A slow-motion video captures a drop of liquid mercury, gleaming with a silvery sheen, bouncing gracefully on a surface.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/A full-body shot of a man crafted entirely from rocks, walking through a dense forest. His rocky for-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">A full-body shot of a man crafted entirely from rocks, walking through a dense forest.</div>
+            </div>
+            <div class="video-card">
+                <video muted loop playsinline preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0">
+                    <source src="asset/An adorable kangaroo wearing vibrant purple overalls and stylish cowboy boots takes a leisurely stro-0_4step_fast_sr_sparse_2k_dcm.mp4" type="video/mp4">
+                </video>
+                <div class="prompt-overlay">An adorable kangaroo wearing vibrant purple overalls and stylish cowboy boots takes a leisurely stroll down a city street.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     10. BibTeX
+     ============================================ -->
+<section class="py-16 px-4">
+    <div class="max-w-3xl mx-auto fade-in-up">
+        <h2 class="text-3xl font-bold text-center mb-8">Citation</h2>
+        <div class="bibtex-block bg-gray-900 text-gray-300 rounded-xl p-6 font-mono text-sm leading-relaxed overflow-x-auto">
+            <button class="copy-btn">Copy</button>
+<pre class="bibtex-code">@inproceedings{luxury2026ultraflash,
+  title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
+  author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Fu, Siming and Zhuang, Jun-hao and Xue, Zeyue and Li, Haoran and Huang, Haoyang and Duan, Nan},
+  booktitle={Arxiv},
+  year={2026}
+}</pre>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     11. Footer
+     ============================================ -->
+<footer class="bg-gray-100 py-8 px-4 text-center text-sm text-gray-500">
+    <p>
+        This website is licensed under a
+        <a href="http://creativecommons.org/licenses/by-sa/4.0/" class="hover:text-blue-600 transition-colors">CC BY-SA 4.0</a> License.
+    </p>
+    <p class="mt-2 text-gray-400">&copy; 2026 Luxury &middot; USTC</p>
+</footer>
+
+<!-- Scroll-to-top button -->
+<button id="scroll-top-btn" class="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full bg-white border border-gray-300 shadow-lg flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Hero video carousel
+    const heroVideos = [
+        "asset/A close-up shot of a confident fashion influencer in a chic winter outfit, posing for a photo shoot.-0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A child in a cozy winter outfit, blowing gently on a steaming mug of hot cocoa to cool it down. The -0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A cinematic closeup and detailed portrait of a reindeer standing in a snowy forest at sunset. The li-0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A cinematic over-the-shoulder shot of a writer sitting at a cluttered desk, lost in thought as they -0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A close-up portrait of a woman, her face illuminated by the side lighting, capturing her delicate fe-0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A close-up shot of a futuristic cybernetic German Shepherd, showcasing its striking brown and black -0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A cyberpunk-style digital illustration of a metal skull growing muscle tendons and flesh, set in a d-0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A cyberpunk-style illustration depicting a lone robot navigating a neon-lit cityscape. The robot sta-0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A detailed and warm moment captured in a traditional Chinese ink wash painting style, featuring a mo-0_4step_fast_sr_sparse_2k_dcm.mp4",
+        "asset/A detailed illustration in a realistic style depicting a raccoon wearing a classic detective's hat, -0_4step_fast_sr_sparse_2k_dcm.mp4"
+    ];
+    let heroIdx = 0;
+    const heroVideo = document.getElementById('hero-bg-video');
+    heroVideo.addEventListener('ended', () => {
+        heroIdx = (heroIdx + 1) % heroVideos.length;
+        heroVideo.src = heroVideos[heroIdx];
+        heroVideo.load();
+        heroVideo.play();
+    });
+
+    // Scroll-triggered fade-in
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.fade-in-up').forEach((el) => observer.observe(el));
+
+    // Animated counters
+    const countEls = document.querySelectorAll('[data-count-to]');
+    if (countEls.length > 0) {
+        const countObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (!entry.isIntersecting || entry.target._counted) return;
+                entry.target._counted = true;
+                const el = entry.target;
+                const target = parseFloat(el.dataset.countTo);
+                const prefix = el.dataset.prefix || '';
+                const suffix = el.dataset.suffix || '';
+                const hasDecimal = String(el.dataset.countTo).indexOf('.') !== -1;
+                const duration = 1500;
+                const start = performance.now();
+                function update(now) {
+                    var t = Math.min(1, (now - start) / duration);
+                    var ease = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+                    var val = ease * target;
+                    el.textContent = prefix + (hasDecimal ? val.toFixed(1) : Math.round(val)) + suffix;
+                    if (t < 1) requestAnimationFrame(update);
+                }
+                requestAnimationFrame(update);
+            });
+        }, { threshold: 0.5 });
+        countEls.forEach(function(el) { countObserver.observe(el); });
+    }
+
+    // Medium-zoom
+    if (typeof mediumZoom === 'function') {
+        mediumZoom('[data-zoomable]', {
+            margin: 40,
+            background: 'rgba(0, 0, 0, 0.75)',
+        });
+    }
+
+    // Lazy load gallery videos when they enter viewport
+    const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const video = entry.target;
+                if (video.preload === 'none') {
+                    video.preload = 'metadata';
+                }
+                videoObserver.unobserve(video);
+            }
+        });
+    }, { rootMargin: '200px' });
+    document.querySelectorAll('#video-grid video').forEach((v) => videoObserver.observe(v));
+
+    // Copy BibTeX
+    const copyBtn = document.querySelector('.copy-btn');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+            const bibtex = document.querySelector('.bibtex-code');
+            if (bibtex) {
+                navigator.clipboard.writeText(bibtex.textContent.trim()).then(() => {
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+                });
+            }
+        });
+    }
+
+    // Dark mode toggle
+    const darkToggle = document.getElementById('dark-toggle');
+    const htmlEl = document.documentElement;
+    function updateToggleIcon() {
+        const icon = darkToggle.querySelector('i');
+        if (htmlEl.classList.contains('dark')) {
+            icon.className = 'fas fa-sun text-yellow-300';
+        } else {
+            icon.className = 'fas fa-moon text-gray-600';
+        }
+    }
+    updateToggleIcon();
+    darkToggle.addEventListener('click', () => {
+        htmlEl.classList.toggle('dark');
+        localStorage.setItem('theme', htmlEl.classList.contains('dark') ? 'dark' : 'light');
+        updateToggleIcon();
+    });
+
+    // Scroll-to-top button
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
+    const topNav = document.getElementById('top-nav');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+        // Make nav opaque after scrolling past hero
+        if (window.scrollY > window.innerHeight * 0.5) {
+            topNav.classList.add('scrolled');
+        } else {
+            topNav.classList.remove('scrolled');
+        }
+    }, { passive: true });
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
+</script>
+
+</body>
+</html>
