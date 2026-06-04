@@ -4,17 +4,25 @@
 </p>
 
 <p align="center">
-  <a href="#">Luxion</a>,
-  <a href="#">Xiaoxiao Ma</a>,
-  <a href="#">Jie Huang</a>,
-  <a href="#">Yuming Li</a>
+  <a href="#">Luxury</a><sup>1</sup>,
+  <a href="#">Jie Huang</a><sup>1</sup>,
+  <a href="#">Zihao Fan</a><sup>2</sup>,
+  <a href="#">Xiaoxiao Ma</a><sup>2</sup>,
+  <a href="#">Yuming Li</a><sup>3</sup>,
+  <a href="#">Siming Fu</a><sup>1</sup>,
+  <a href="#">Jun-hao Zhuang</a><sup>1</sup>,
   <br>
-  University of Science and Technology of China (USTC)
+  <a href="#">Zeyue Xue</a><sup>1</sup>,
+  <a href="#">Haoran Li</a><sup>1</sup>,
+  <a href="#">Haoyang Huang</a><sup>1</sup>,
+  <a href="#">Nan Duan</a><sup>1</sup>
+  <br>
+  <sup>1</sup> JD Explore Academy &nbsp;&nbsp; <sup>2</sup> University of Science and Technology of China (USTC) &nbsp;&nbsp; <sup>3</sup> Peking University
 </p>
 
 <p align="center">
   <a href="#"><b>Paper</b></a> |
-  <a href="#"><b>Project Page</b></a> |
+  <a href="https://xin1u.github.io/UltraFlash/"><b>Project Page</b></a> |
   <a href="https://github.com/xin1u/UltraFlash"><b>Code (GitHub)</b></a> |
   <a href="#"><b>Models (HuggingFace)</b></a>
 </p>
@@ -166,9 +174,9 @@ Text Prompt
 ## Citation
 
 ```bibtex
-@inproceedings{luxion2026ultraflash,
+@inproceedings{luxury2026ultraflash,
   title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
-  author={Luxion and Ma, Xiaoxiao and Huang, Jie and Li, Yuming},
+  author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Fu, Siming and Zhuang, Jun-hao and Xue, Zeyue and Li, Haoran and Huang, Haoyang and Duan, Nan},
   booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
   year={2026}
 }

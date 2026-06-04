@@ -1,0 +1,16 @@
+#!/bin/bash
+# Ultra Flash: Real-Time High-Resolution Streaming Video Generation
+# One-click inference script
+
+python inference.py \
+    --config_path configs/self_forcing_dmd_4step.yaml \
+    --checkpoint_path checkpoints/self_forcing_dmd.pt \
+    --data_path prompts/examples.txt \
+    --output_folder outputs/ \
+    --taehv \
+    --torch_compile \
+    --compile_sr_dit \
+    --use_ema \
+    --condition_noise_scale 0.0 \
+    --dcm_lr_steps_subsequent 3 \
+    --dcm_adaptive_refresh
