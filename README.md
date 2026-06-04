@@ -4,23 +4,6 @@
 </p>
 
 <p align="center">
-  <a href="#">Luxury</a><sup>1</sup>,
-  <a href="#">Jie Huang</a><sup>1</sup>,
-  <a href="#">Zihao Fan</a><sup>2</sup>,
-  <a href="#">Xiaoxiao Ma</a><sup>2</sup>,
-  <a href="#">Yuming Li</a><sup>3</sup>,
-  <a href="#">Siming Fu</a><sup>1</sup>,
-  <a href="#">Jun-hao Zhuang</a><sup>1</sup>,
-  <br>
-  <a href="#">Zeyue Xue</a><sup>1</sup>,
-  <a href="#">Haoran Li</a><sup>1</sup>,
-  <a href="#">Haoyang Huang</a><sup>1</sup>,
-  <a href="#">Nan Duan</a><sup>1</sup>
-  <br>
-  <sup>1</sup> JD Explore Academy &nbsp;&nbsp; <sup>2</sup> University of Science and Technology of China (USTC) &nbsp;&nbsp; <sup>3</sup> Peking University
-</p>
-
-<p align="center">
   <a href="#"><b>Paper</b></a> |
   <a href="https://xin1u.github.io/UltraFlash/"><b>Project Page</b></a> |
   <a href="https://github.com/xin1u/UltraFlash"><b>Code (GitHub)</b></a> |
@@ -36,8 +19,6 @@
 3. **Cascaded Streaming Optimization** (sparse distillation + DPO + dynamic cache management)
 
 ---
-
-https://github.com/user-attachments/assets/PLACEHOLDER_VIDEO_ID
 
 ## Requirements
 
@@ -75,10 +56,10 @@ The `inference/checkpoints/` folder should contain:
 | `self_forcing_dmd.pt` | Self-Forcing 4-step streaming generator | ~5 GB |
 | `sr_dit_sparse.pth` | Sparse causal SR DiT (single-step) | ~5 GB |
 | `latent_upsampler.pth` | Causal streaming latent upsampler | ~8 MB |
-| `taehv.pth` | High-resolution decoder (TAEHV) | ~20 MB |
+| `tiny_decoder.pth` | Tiny Decoder for high-resolution decoding | ~20 MB |
 | `ultra_decoder_v3.pth` | **(Optional)** Ultra Decoder V3 — improved HR decoder | ~TBD |
 
-> **Ultra Decoder V3** is our improved high-resolution decoder with better texture fidelity. It can optionally replace TAEHV. Weights will be released after fine-tuning is complete. Use `--decoder ultra_decoder_v3 --decoder_ckpt checkpoints/ultra_decoder_v3.pth` to enable.
+> **Ultra Decoder V3** is our improved high-resolution decoder with better texture fidelity. It can optionally replace the default Tiny Decoder. Weights will be released after fine-tuning is complete. Use `--decoder_ckpt checkpoints/ultra_decoder_v3.pth` to enable.
 
 ## Quick Start
 
@@ -96,7 +77,7 @@ python inference.py \
     --checkpoint_path checkpoints/self_forcing_dmd.pt \
     --data_path prompts/examples.txt \
     --output_folder outputs/ \
-    --taehv \
+    --tiny_decoder \
     --torch_compile \
     --compile_sr_dit \
     --use_ema
@@ -111,6 +92,7 @@ python inference.py \
     --data_path prompts/examples.txt \
     --output_folder outputs_lr/ \
     --lr_only \
+    --tiny_decoder \
     --use_ema
 ```
 
@@ -121,7 +103,8 @@ python inference.py \
 | `--torch_compile` | False | Enable torch.compile for SF DiT (~1.5x speedup) |
 | `--compile_sr_dit` | False | Enable torch.compile for SR DiT |
 | `--fp8` | False | FP8 quantization for SF DiT |
-| `--taehv` | True | Use TAEHV HR decoder (faster than Wan VAE) |
+| `--tiny_decoder` | True | Use Tiny Decoder for HR decoding (faster than Wan VAE) |
+| `--decoder_ckpt` | `checkpoints/tiny_decoder.pth` | Path to decoder checkpoint |
 | `--sr_kv_len` | 3 | SR DiT KV cache window length |
 | `--condition_noise_scale` | 0.0 | Noise injected into SR condition |
 | `--dcm_lr_steps_subsequent` | 3 | Denoising steps for subsequent chunks (4=full) |
@@ -163,8 +146,8 @@ Text Prompt
             │ Refined HR latents
             ▼
 ┌─────────────────────────┐
-│  TAEHV HR Decoder        │  Latent → Pixel (960×1664 or 1440×2496)
-│  (Tiny Autoencoder)      │  Sequential streaming mode
+│  Tiny Decoder (HR)       │  Latent → Pixel (960×1664 or 1440×2496)
+│  (Causal Memory Network) │  Sequential streaming mode
 └───────────┬─────────────┘
             │
             ▼
@@ -177,7 +160,7 @@ Text Prompt
 @inproceedings{luxury2026ultraflash,
   title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
   author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Fu, Siming and Zhuang, Jun-hao and Xue, Zeyue and Li, Haoran and Huang, Haoyang and Duan, Nan},
-  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
+  booktitle={arXiv preprint},
   year={2026}
 }
 ```

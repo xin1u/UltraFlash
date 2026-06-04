@@ -7,7 +7,7 @@ python inference.py \
     --checkpoint_path checkpoints/self_forcing_dmd.pt \
     --data_path prompts/examples.txt \
     --output_folder outputs/ \
-    --taehv \
+    --tiny_decoder \
     --torch_compile \
     --compile_sr_dit \
     --use_ema \
