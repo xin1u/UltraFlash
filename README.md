@@ -55,13 +55,22 @@ python setup.py develop
 ## Download Checkpoints
 
 ```bash
-cd inference
-
 # Wan2.1-T2V-1.3B base model
-huggingface-cli download Wan-AI/Wan2.1-T2V-1.3B --local-dir wan_models/Wan2.1-T2V-1.3B
+huggingface-cli download Wan-AI/Wan2.1-T2V-1.3B --local-dir inference/wan_models/Wan2.1-T2V-1.3B
 
-# Ultra Flash checkpoints
-huggingface-cli download YOUR_ORG/UltraFlash --local-dir checkpoints
+# Ultra Flash checkpoints (short video)
+huggingface-cli download YOUR_ORG/UltraFlash --local-dir inference/checkpoints
+
+# Ultra Flash checkpoints (long video, optional)
+huggingface-cli download YOUR_ORG/UltraFlash-Long --local-dir inference_long/checkpoints
+
+# Symlink shared checkpoints to avoid duplication (optional)
+cd inference_long/checkpoints
+ln -s ../../inference/checkpoints/sr_dit_sparse.pth .
+ln -s ../../inference/checkpoints/latent_upsampler.pth .
+ln -s ../../inference/checkpoints/tiny_decoder.pth .
+ln -s ../../inference/checkpoints/ultra_decoder_v3.pth .
+ln -s ../../inference/wan_models wan_models
 ```
 
 The `inference/checkpoints/` folder should contain:
