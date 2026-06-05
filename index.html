@@ -459,7 +459,7 @@
             <a href="#" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all">
                 <i class="fas fa-file-pdf"></i> Paper
             </a>
-            <a href="#" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 hover:border-white/50 hover:shadow-md transition-all">
+            <a href="https://github.com/xin1u/UltraFlash" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 hover:border-white/50 hover:shadow-md transition-all">
                 <i class="fab fa-github"></i> Code
             </a>
             <a href="#" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 hover:border-white/50 hover:shadow-md transition-all">
@@ -527,7 +527,7 @@
     <div class="max-w-4xl mx-auto fade-in-up">
         <h2 class="text-3xl font-bold text-center mb-8">Abstract</h2>
         <p class="text-gray-600 leading-relaxed text-justify">
-            While recent autoregressive video diffusion models achieve remarkable streaming quality, they remain confined to low resolutions (<em>e.g.</em>, 480P), leaving efficient, scalable, real-time high-resolution video generation a fundamental open challenge. To bridge this gap, we present <strong class="text-gray-900">Ultra Flash</strong>, a cascaded streaming framework capable of real-time high-resolution video generation. Ultra Flash achieves <strong class="text-gray-900">~30 FPS at 1K resolution</strong> and <strong class="text-gray-900">~18 FPS at 2K resolution</strong> on a single GPU through three key contributions: (1) an architecture-preserving T2V-to-TV2V super-resolution training paradigm coupled with an AIGC-oriented data degradation pipeline that effectively preserves the generative capability of the base model; (2) a causal streaming latent upsampler paired with a high-resolution decoder, which enhances spatiotemporal coherence while enabling efficient latent spatial scaling; and (3) a cascade high-resolution streaming video generation optimization scheme that performs hybrid-reward-enhanced sparse causalization and single-step distillation, then introduces cascaded streaming self-forcing preference optimization with dynamic cache management, jointly enhancing overall coherence, improving quality, and enabling real-time streaming.
+            While recent autoregressive video diffusion models achieve remarkable streaming quality, they remain confined to low resolutions (<em>e.g.</em>, 480P), leaving efficient, scalable, real-time high-resolution video generation a fundamental open challenge. To bridge this gap, we present <strong class="text-gray-900">Ultra Flash</strong>, a cascaded streaming framework capable of real-time high-resolution video generation. Ultra Flash achieves <strong class="text-gray-900">~30 FPS at 1K resolution</strong> and <strong class="text-gray-900">~18 FPS at 2K resolution</strong> on a single B200 GPU through three key contributions: (1) an architecture-preserving T2V-to-TV2V super-resolution training paradigm coupled with an AIGC-oriented data degradation pipeline that effectively preserves the generative capability of the base model; (2) a causal streaming latent upsampler paired with a high-resolution decoder, which enhances spatiotemporal coherence while enabling efficient latent spatial scaling; and (3) a cascade high-resolution streaming video generation optimization scheme that performs hybrid-reward-enhanced sparse causalization and single-step distillation, then introduces cascaded streaming self-forcing preference optimization with dynamic cache management, jointly enhancing overall coherence, improving quality, and enabling real-time streaming.
         </p>
         <!-- Intro Figure -->
         <div class="mt-10 fade-in-up">
@@ -853,7 +853,7 @@
 <pre class="bibtex-code">@inproceedings{luxury2026ultraflash,
   title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
   author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Fu, Siming and Zhuang, Jun-hao and Xue, Zeyue and Li, Haoran and Huang, Haoyang and Duan, Nan},
-  booktitle={Arxiv},
+  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
   year={2026}
 }</pre>
         </div>
