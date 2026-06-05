@@ -12,6 +12,13 @@
 
 ---
 
+<p align="center">
+  <img src="assets/show1.png" width="100%">
+</p>
+<p align="center">
+  <img src="assets/show2.png" width="100%">
+</p>
+
 **Ultra Flash** is the first framework to achieve **real-time high-resolution streaming video generation**, producing **1K video at ~30 FPS** and **2K video at ~18 FPS** on a single GPU. It cascades three key components after a low-resolution streaming generator:
 
 1. **Architecture-Preserving T2V-to-TV2V SR Training** with AIGC-oriented degradation
@@ -58,19 +65,17 @@ huggingface-cli download YOUR_ORG/UltraFlash --local-dir checkpoints
 ```
 
 The `inference/checkpoints/` folder should contain:
-| File | Description | Size |
-|------|-------------|------|
-| `self_forcing_dmd.pt` | Self-Forcing 4-step streaming generator | ~5 GB |
-| `sr_dit_sparse.pth` | Sparse causal SR DiT (single-step) | ~5 GB |
-| `latent_upsampler.pth` | Causal streaming latent upsampler | ~8 MB |
-| `tiny_decoder.pth` | Tiny Decoder for high-resolution decoding | ~20 MB |
-| `ultra_decoder_v3.pth` | **(Optional)** Ultra Decoder V3 — improved HR decoder | ~TBD |
-
-> **Ultra Decoder V3** is our improved high-resolution decoder with better texture fidelity. It can optionally replace the default Tiny Decoder. Weights will be released after fine-tuning is complete. Use `--decoder_ckpt checkpoints/ultra_decoder_v3.pth` to enable.
+| File | Description |
+|------|-------------|
+| `self_forcing_dmd.pt` | Self-Forcing 4-step streaming generator |
+| `sr_dit_sparse.pth` | Sparse causal SR DiT (single-step) |
+| `latent_upsampler.pth` | Causal streaming latent upsampler |
+| `tiny_decoder.pth` | Tiny Decoder for high-resolution decoding |
+| `ultra_decoder_v3.pth` | **(Optional)** Ultra Decoder V3 — improved HR decoder with better texture fidelity |
 
 ## Quick Start
 
-### One-click inference (1K resolution, ~30 FPS)
+### One-click inference (2K resolution, ~18 FPS)
 ```bash
 cd inference
 bash inference.sh
@@ -84,10 +89,10 @@ python inference.py \
     --checkpoint_path checkpoints/self_forcing_dmd.pt \
     --data_path prompts/examples.txt \
     --output_folder outputs/ \
+    --use_ema \
     --tiny_decoder \
     --torch_compile \
-    --compile_sr_dit \
-    --use_ema
+    --compile_sr_dit
 ```
 
 ### LR-only mode (480P, for comparison)
@@ -98,25 +103,75 @@ python inference.py \
     --checkpoint_path checkpoints/self_forcing_dmd.pt \
     --data_path prompts/examples.txt \
     --output_folder outputs_lr/ \
-    --lr_only \
+    --use_ema \
+    --lr_only
+```
+
+## Long Video Generation
+
+The `inference_long/` directory supports long video generation (~10 seconds, 120 latent frames) using **LongLive** with LoRA adapters and the same SR cascade pipeline.
+
+### Additional checkpoints for long video
+
+The `inference_long/checkpoints/` folder requires:
+
+| File | Description |
+|------|-------------|
+| `longlive_base.pt` | LongLive base generator (Self-Forcing + long video fine-tuning) |
+| `lora.pt` | LoRA adapter for long video coherence (rank 256) |
+| `sr_dit_sparse.pth` | Same as `inference/` — can be symlinked |
+| `latent_upsampler.pth` | Same as `inference/` — can be symlinked |
+| `tiny_decoder.pth` | Same as `inference/` — can be symlinked |
+
+### Run long video inference
+```bash
+cd inference_long
+python inference_sr.py \
+    --config_path configs/longlive_inference_sr.yaml \
+    --use_sparse_sr \
     --tiny_decoder \
-    --use_ema
+    --torch_compile \
+    --compile_sr_dit
 ```
 
 ## Key Arguments
 
+### Short video (`inference/inference.py`)
+
 | Argument | Default | Description |
 |----------|---------|-------------|
+| `--use_ema` | False | Load EMA weights (recommended) |
+| `--num_output_frames` | 21 | Number of latent frames (~5s video at 21 frames) |
+| `--num_samples` | 1 | Number of samples per prompt |
+| `--seed` | 0 | Random seed |
 | `--torch_compile` | False | Enable torch.compile for SF DiT (~1.5x speedup) |
 | `--compile_sr_dit` | False | Enable torch.compile for SR DiT |
 | `--fp8` | False | FP8 quantization for SF DiT |
 | `--tiny_decoder` | True | Use Tiny Decoder for HR decoding (faster than Wan VAE) |
 | `--decoder_ckpt` | `checkpoints/tiny_decoder.pth` | Path to decoder checkpoint |
+| `--ultra_decoder_v3` | False | Use Ultra Decoder V3 (better texture, replaces Tiny Decoder) |
+| `--ultra_decoder_v3_ckpt` | `checkpoints/ultra_decoder_v3.pth` | Path to V3 decoder checkpoint |
 | `--sr_kv_len` | 3 | SR DiT KV cache window length |
 | `--condition_noise_scale` | 0.0 | Noise injected into SR condition |
-| `--dcm_lr_steps_subsequent` | 3 | Denoising steps for subsequent chunks (4=full) |
-| `--dcm_adaptive_refresh` | True | Enable IQA-based adaptive cache refresh |
+| `--save_lr_video` | False | Also save LR video output |
+| `--lr_only` | False | Only generate LR video (skip SR cascade) |
+| `--dcm_lr_steps_subsequent` | 4 | Denoising steps for subsequent chunks (4=full) |
+| `--dcm_adaptive_refresh` | False | Enable IQA-based adaptive cache refresh |
 | `--no_dcm` | False | Disable all DCM optimizations |
+
+### Long video (`inference_long/inference_sr.py`)
+
+Inherits most arguments from the YAML config. Key CLI overrides:
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `--config_path` | (required) | Path to YAML config (e.g. `configs/longlive_inference_sr.yaml`) |
+| `--use_sparse_sr` | False | Use sparse attention for SR DiT (recommended) |
+| `--tiny_decoder` | False | Use Tiny Decoder for HR decoding |
+| `--torch_compile` | False | Compile SF DiT |
+| `--compile_sr_dit` | False | Compile SR DiT |
+| `--fp8` | False | FP8 quantization for SF DiT |
+| `--fp8_sr` | False | FP8 quantization for SR DiT |
 
 ## Dynamic Cache Management (DCM)
 
@@ -160,6 +215,10 @@ Text Prompt
             ▼
        2K Video Output (~18 FPS)
 ```
+
+## Training
+
+Training code is coming soon. See the `train/` directory for updates.
 
 ## Citation
 
