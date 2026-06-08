@@ -3,51 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions. The first framework achieving real-time 1K (~30 FPS) and 2K (~18 FPS) streaming video generation on a single GPU.">
-    <meta name="keywords" content="Ultra Flash, Video Generation, Streaming, Real-Time, High-Resolution, Super-Resolution, NeurIPS 2026, Diffusion Model, Autoregressive Video Generation">
-    <meta name="author" content="Luxury, Jie Huang, Zihao Fan, Xiaoxiao Ma, Yuming Li, Siming Fu, Jun-hao Zhuang, Zeyue Xue, Haoran Li, Haoyang Huang, Nan Duan">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://xin1u.github.io/UltraFlash/">
+    <meta name="description" content="Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions — NeurIPS 2026">
+    <meta name="keywords" content="Ultra Flash, Video Generation, Streaming, Real-Time, High-Resolution, Super-Resolution, NeurIPS 2026">
     <title>Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions</title>
-
-    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
-    <meta property="og:title" content="Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions">
-    <meta property="og:description" content="The first framework achieving real-time 1K (~30 FPS) and 2K (~18 FPS) streaming video generation on a single GPU through cascaded causal streaming architecture.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://xin1u.github.io/UltraFlash/">
-    <meta property="og:image" content="https://xin1u.github.io/UltraFlash/assets/intro_full.png">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions">
-    <meta name="twitter:description" content="Real-time 1K (~30 FPS) and 2K (~18 FPS) streaming video generation on a single GPU.">
-    <meta name="twitter:image" content="https://xin1u.github.io/UltraFlash/assets/intro_full.png">
-
-    <!-- Structured Data for Google (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ScholarlyArticle",
-        "name": "Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions",
-        "headline": "Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions",
-        "description": "The first framework achieving real-time high-resolution streaming video generation, producing 1K video at ~30 FPS and 2K video at ~18 FPS on a single GPU.",
-        "author": [
-            {"@type": "Person", "name": "Luxury"},
-            {"@type": "Person", "name": "Jie Huang"},
-            {"@type": "Person", "name": "Zihao Fan"},
-            {"@type": "Person", "name": "Xiaoxiao Ma"},
-            {"@type": "Person", "name": "Yuming Li"},
-            {"@type": "Person", "name": "Siming Fu"},
-            {"@type": "Person", "name": "Jun-hao Zhuang"},
-            {"@type": "Person", "name": "Zeyue Xue"},
-            {"@type": "Person", "name": "Haoran Li"},
-            {"@type": "Person", "name": "Haoyang Huang"},
-            {"@type": "Person", "name": "Nan Duan"}
-        ],
-        "url": "https://xin1u.github.io/UltraFlash/",
-        "datePublished": "2026"
-    }
-    </script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -436,21 +394,45 @@
         <div class="mt-4 space-y-2">
             <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-base text-gray-200">
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Luxury</a><sup class="text-gray-400 text-xs">1</sup>,</span>
-                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Jie Huang</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Jie Huang</a><sup class="text-gray-400 text-xs">1‡</sup>,</span>
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Zihao Fan</a><sup class="text-gray-400 text-xs">2</sup>,</span>
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Xiaoxiao Ma</a><sup class="text-gray-400 text-xs">2</sup>,</span>
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Yuming Li</a><sup class="text-gray-400 text-xs">3</sup>,</span>
-                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Siming Fu</a><sup class="text-gray-400 text-xs">1</sup>,</span>
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Jun-hao Zhuang</a><sup class="text-gray-400 text-xs">1</sup>,</span>
             </div>
-            <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-base text-gray-200 font-semibold">
+            <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-base text-gray-200">
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Zeyue Xue</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Siming Fu</a><sup class="text-gray-400 text-xs">1</sup>,</span>
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Haoran Li</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Mingchen Zhong</a><sup class="text-gray-400 text-xs">2</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Guohui Zhang</a><sup class="text-gray-400 text-xs">2</sup>,</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-base text-gray-200">
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Shichen Ma</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Yijun Liu</a><sup class="text-gray-400 text-xs">4</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Jiaqi Shi</a><sup class="text-gray-400 text-xs">2</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Yanwen Ma</a><sup class="text-gray-400 text-xs">5</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Yaofeng Su</a><sup class="text-gray-400 text-xs">6</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Haoyu Wang</a><sup class="text-gray-400 text-xs">4</sup>,</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-base text-gray-200">
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Yaowei Li</a><sup class="text-gray-400 text-xs">3</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Songchun Zhang</a><sup class="text-gray-400 text-xs">7</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Weiyang Jin</a><sup class="text-gray-400 text-xs">8</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Yuxuan Bian</a><sup class="text-gray-400 text-xs">9</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Shiyi Zhang</a><sup class="text-gray-400 text-xs">4</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Haojun Xu</a><sup class="text-gray-400 text-xs">5</sup>,</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-base text-gray-200 font-semibold">
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Shuai Lu</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Xin Han</a><sup class="text-gray-400 text-xs">1</sup>,</span>
+                <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Wei Tang</a><sup class="text-gray-400 text-xs">1</sup>,</span>
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Haoyang Huang</a><sup class="text-gray-400 text-xs">1</sup>,</span>
                 <span><a href="#" class="hover:text-blue-300 transition-colors font-medium">Nan Duan</a><sup class="text-gray-400 text-xs">1</sup></span>
             </div>
+            <p class="text-gray-300 text-xs mt-1">‡ Project leader</p>
             <p class="text-gray-300 text-sm">
-                <sup>1</sup> JD Explore Academy &nbsp;&nbsp; <sup>2</sup> University of Science and Technology of China (USTC) &nbsp;&nbsp; <sup>3</sup> Peking University
+                <sup>1</sup> JD Explore Academy &nbsp;&nbsp; <sup>2</sup> USTC &nbsp;&nbsp; <sup>3</sup> PKU &nbsp;&nbsp; <sup>4</sup> THU &nbsp;&nbsp; <sup>5</sup> BUAA &nbsp;&nbsp; <sup>6</sup> FDU &nbsp;&nbsp; <sup>7</sup> HKUST &nbsp;&nbsp; <sup>8</sup> HKU &nbsp;&nbsp; <sup>9</sup> CUHK
             </p>
         </div>
 
@@ -459,7 +441,7 @@
             <a href="#" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all">
                 <i class="fas fa-file-pdf"></i> Paper
             </a>
-            <a href="https://github.com/xin1u/UltraFlash" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 hover:border-white/50 hover:shadow-md transition-all">
+            <a href="#" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 hover:border-white/50 hover:shadow-md transition-all">
                 <i class="fab fa-github"></i> Code
             </a>
             <a href="#" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 hover:border-white/50 hover:shadow-md transition-all">
@@ -597,38 +579,39 @@
                             <th class="method-name !text-left !pl-4">Method</th>
                             <th>Resolution</th>
                             <th>Steps</th>
-                            <th>Throughput (FPS) &uarr;</th>
+                            <th>FPS &uarr;</th>
                             <th>Latency (ms) &darr;</th>
+                            <th>Streaming</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td class="method-name">CausVid</td>
-                            <td>480&times;832</td><td>4</td><td>24.4</td><td>123</td>
+                            <td>480&times;832</td><td>4</td><td>24.4</td><td>123</td><td>&check;</td>
                         </tr>
                         <tr>
                             <td class="method-name">Self Forcing</td>
-                            <td>480&times;832</td><td>4</td><td>32.0</td><td>125</td>
+                            <td>480&times;832</td><td>4</td><td>32.0</td><td>125</td><td>&check;</td>
                         </tr>
                         <tr>
                             <td class="method-name">Causal Forcing</td>
-                            <td>480&times;832</td><td>4</td><td>31.2</td><td>128</td>
+                            <td>480&times;832</td><td>4</td><td>31.2</td><td>128</td><td>&check;</td>
                         </tr>
                         <tr>
                             <td class="method-name">DummyForcing</td>
-                            <td>480&times;832</td><td>4</td><td>28.0</td><td>143</td>
+                            <td>480&times;832</td><td>4</td><td>28.0</td><td>143</td><td>&check;</td>
                         </tr>
                         <tr>
                             <td class="method-name">Self Forcing + FlashVSR</td>
-                            <td>768&times;1408</td><td>5</td><td>8.0</td><td>500</td>
+                            <td>768&times;1408</td><td>5</td><td>8.0</td><td>500</td><td>&times;</td>
                         </tr>
                         <tr class="row-ours">
                             <td class="method-name">Ultra Flash (Ours)</td>
-                            <td class="best">960&times;1664 (1K)</td><td>4</td><td class="best">30.0</td><td class="best">40</td>
+                            <td class="best">960&times;1664 (1K)</td><td>4</td><td class="best">30.0</td><td class="best">40</td><td>&check;</td>
                         </tr>
                         <tr class="row-ours">
                             <td class="method-name">Ultra Flash (Ours)</td>
-                            <td class="best">1440&times;2496 (2K)</td><td>4</td><td>18.0</td><td>67</td>
+                            <td class="best">1440&times;2496 (2K)</td><td>4</td><td>18.0</td><td>67</td><td>&check;</td>
                         </tr>
                     </tbody>
                 </table>
@@ -852,7 +835,7 @@
             <button class="copy-btn">Copy</button>
 <pre class="bibtex-code">@inproceedings{luxury2026ultraflash,
   title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
-  author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Fu, Siming and Zhuang, Jun-hao and Xue, Zeyue and Li, Haoran and Huang, Haoyang and Duan, Nan},
+  author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Zhuang, Jun-hao and Xue, Zeyue and Fu, Siming and Li, Haoran and Zhong, Mingchen and Zhang, Guohui and Ma, Shichen and Liu, Yijun and Shi, Jiaqi and Ma, Yanwen and Su, Yaofeng and Wang, Haoyu and Li, Yaowei and Zhang, Songchun and Jin, Weiyang and Bian, Yuxuan and Zhang, Shiyi and Xu, Haojun and Lu, Shuai and Han, Xin and Tang, Wei and Huang, Haoyang and Duan, Nan},
   booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
   year={2026}
 }</pre>
