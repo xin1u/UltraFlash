@@ -4,10 +4,10 @@
 </p>
 
 <p align="center">
-  <a href="#"><b>Paper</b></a> |
+  <a href="https://arxiv.org/pdf/2606.09150"><b>Paper</b></a> |
   <a href="https://xin1u.github.io/UltraFlash/"><b>Project Page</b></a> |
   <a href="https://github.com/xin1u/UltraFlash"><b>Code (GitHub)</b></a> |
-  <a href="#"><b>Models (HuggingFace)</b></a>
+  <a href="https://huggingface.co/xin1u/UltraFlash"><b>Models (HuggingFace)</b></a>
 </p>
 
 ---
