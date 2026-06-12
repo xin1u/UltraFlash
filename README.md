@@ -84,7 +84,7 @@ The `inference/checkpoints/` folder should contain:
 
 ## Quick Start
 
-### One-click inference (2K resolution, ~18 FPS)
+### One-click inference (2K or 1K)
 ```bash
 cd inference
 bash inference.sh
@@ -205,7 +205,7 @@ Text Prompt
             │ LR latents (16×60×104)
             ▼
 ┌─────────────────────────┐
-│  Causal Latent Upsampler │  2× spatial upsampling in latent space
+│  Causal Latent Upsampler │  2× or 3× spatial upsampling in latent space
 │  (~2M params, Conv2D)    │  Causal memory for temporal coherence
 └───────────┬─────────────┘
             │ HR latents (16×120×208)
