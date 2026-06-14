@@ -234,7 +234,7 @@ Training code is coming soon. See the `train/` directory for updates.
 ```bibtex
 @inproceedings{luxury2026ultraflash,
   title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
-  author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Fu, Siming and Zhuang, Jun-hao and Xue, Zeyue and Li, Haoran and Huang, Haoyang and Duan, Nan},
+  author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Zhuang, Jun-hao and Xue, Zeyue and Fu, Siming and Li, Haoran and Zhong, Mingchen and Zhang, Guohui and Ma, Shichen and Liu, Yijun and Shi, Jiaqi and Ma, Yanwen and Su, Yaofeng and Wang, Haoyu and Li, Yaowei and Zhang, Songchun and Jin, Weiyang and Bian, Yuxuan and Zhang, Shiyi and Xu, Haojun and Lu, Shuai and Han, Xin and Tang, Wei and Huang, Haoyang and Duan, Nan},
   booktitle={arXiv preprint},
   year={2026}
 }
