@@ -69,6 +69,13 @@
         #top-nav.scrolled .nav-link:hover {
             color: #2563eb;
         }
+        #top-nav.scrolled #dark-toggle {
+            background-color: transparent;
+            border-color: #d1d5db;
+        }
+        #top-nav.scrolled #dark-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
         #top-nav.scrolled #dark-toggle i {
             color: #4b5563;
         }
@@ -210,6 +217,15 @@
             padding: 0.4rem;
         }
 
+        /* Feature cards */
+        .feature-card {
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .feature-card:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
+            transform: translateY(-3px);
+        }
+
         /* BibTeX */
         .bibtex-block {
             position: relative;
@@ -218,19 +234,22 @@
             position: absolute;
             top: 0.8rem;
             right: 0.8rem;
-            background: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #2563eb, #9333ea);
             border: none;
-            color: #374151;
-            padding: 0.3rem 0.7rem;
-            border-radius: 6px;
+            color: #fff;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.75rem;
             font-family: 'Space Grotesk', sans-serif;
             transition: all 0.2s;
         }
         .bibtex-block .copy-btn:hover {
-            background: #d1d5db;
-            color: #111827;
+            filter: brightness(1.1);
+            box-shadow: 0 4px 14px rgba(88, 28, 235, 0.35);
         }
 
         /* Medium-zoom background */
@@ -262,6 +281,14 @@
         }
         html.dark .bg-white {
             background-color: #111827 !important;
+        }
+        /* Feature cards must stay lighter than the gray section they sit on
+           (section bg-gray-50 -> #1f2937 in dark mode, so cards go lighter) */
+        html.dark .feature-card.bg-white {
+            background-color: #374151 !important;
+        }
+        html.dark .feature-card:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
         }
         html.dark #top-nav {
             background-color: rgba(17, 24, 39, 0.8);
@@ -356,7 +383,7 @@
             <a href="#method" class="text-sm font-medium text-gray-200 hover:text-blue-300 transition-colors hidden md:inline nav-link">Method</a>
             <a href="#results" class="text-sm font-medium text-gray-200 hover:text-blue-300 transition-colors hidden md:inline nav-link">Results</a>
             <a href="#gallery" class="text-sm font-medium text-gray-200 hover:text-blue-300 transition-colors hidden md:inline nav-link">Gallery</a>
-            <button id="dark-toggle" class="ml-2 p-2 rounded-full hover:bg-white/20 transition-colors" aria-label="Toggle dark mode">
+            <button id="dark-toggle" class="ml-2 p-2 rounded-full bg-white/15 border border-white/30 hover:bg-white/25 transition-colors" aria-label="Toggle dark mode">
                 <i class="fas fa-moon text-gray-200"></i>
             </button>
         </div>
@@ -529,15 +556,15 @@
         <h2 class="text-3xl font-bold text-center mb-4 fade-in-up">Key Contributions</h2>
         <p class="text-gray-500 text-center mb-10 max-w-2xl mx-auto fade-in-up">Three core innovations that enable real-time high-resolution streaming video generation.</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in-up">
-            <div class="bg-gray-50 rounded-xl p-6 pl-7 border-l-4 border-blue-600 hover:shadow-lg transition-shadow">
+            <div class="feature-card bg-white rounded-xl p-6 pl-7 border-l-4 border-blue-600">
                 <h3 class="text-lg font-bold text-gray-900 mb-2">T2V-to-TV2V SR Training</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">Architecture-preserving paradigm that converts any pre-trained T2V model into a generative super-resolution model without modification, with AIGC-oriented degradation.</p>
             </div>
-            <div class="bg-gray-50 rounded-xl p-6 pl-7 border-l-4 border-purple-600 hover:shadow-lg transition-shadow">
+            <div class="feature-card bg-white rounded-xl p-6 pl-7 border-l-4 border-purple-600">
                 <h3 class="text-lg font-bold text-gray-900 mb-2">Causal Streaming Upsampler</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">Ultralight causal memory network (~2M params) that upsamples latents with spatiotemporal coherence, adding &lt;5% pipeline overhead.</p>
             </div>
-            <div class="bg-gray-50 rounded-xl p-6 pl-7 border-l-4 border-indigo-600 hover:shadow-lg transition-shadow">
+            <div class="feature-card bg-white rounded-xl p-6 pl-7 border-l-4 border-indigo-600">
                 <h3 class="text-lg font-bold text-gray-900 mb-2">Cascaded Streaming Optimization</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">Hybrid-reward sparse distillation + cascaded DPO preference optimization + dynamic cache management for real-time inference.</p>
             </div>
@@ -627,7 +654,7 @@
 <!-- ============================================
      9. Video Gallery
      ============================================ -->
-<section id="gallery" class="bg-gray-50 py-16 px-4">
+<section id="gallery" class="py-16 px-4">
     <div class="max-w-full mx-auto px-4 md:px-8">
         <h2 class="text-3xl font-bold text-center mb-4 fade-in-up">Gallery</h2>
         <p class="text-gray-500 text-center mb-10 fade-in-up">Real-time 2K streaming video generation results. Hover to see the text prompt.</p>
@@ -832,11 +859,11 @@
 <!-- ============================================
      10. BibTeX
      ============================================ -->
-<section class="py-16 px-4">
+<section class="py-16 px-4 bg-gray-50">
     <div class="max-w-3xl mx-auto fade-in-up">
         <h2 class="text-3xl font-bold text-center mb-8">Citation</h2>
         <div class="bibtex-block bg-gray-900 text-gray-300 rounded-xl p-6 font-mono text-sm leading-relaxed overflow-x-auto">
-            <button class="copy-btn">Copy</button>
+            <button class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
 <pre class="bibtex-code">@inproceedings{luxury2026ultraflash,
   title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
   author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Zhuang, Jun-hao and Xue, Zeyue and Fu, Siming and Li, Haoran and Zhong, Mingchen and Zhang, Guohui and Ma, Shichen and Liu, Yijun and Shi, Jiaqi and Ma, Yanwen and Su, Yaofeng and Wang, Haoyu and Li, Yaowei and Zhang, Songchun and Jin, Weiyang and Bian, Yuxuan and Zhang, Shiyi and Xu, Haojun and Lu, Shuai and Han, Xin and Tang, Wei and Huang, Haoyang and Duan, Nan},
@@ -959,8 +986,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const bibtex = document.querySelector('.bibtex-code');
             if (bibtex) {
                 navigator.clipboard.writeText(bibtex.textContent.trim()).then(() => {
-                    copyBtn.textContent = 'Copied!';
-                    setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => { copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 2000);
                 });
             }
         });
