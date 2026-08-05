@@ -1,16 +1,17 @@
-<p align="center">
-<h1 align="center">Ultra Flash ⚡</h1>
-<h3 align="center">Scaling Real-Time Streaming Video Generation to High Resolutions</h3>
-</p>
+<div align="center">
 
-<p align="center">
-  <a href="https://arxiv.org/pdf/2606.09150"><b>Paper</b></a> |
-  <a href="https://xin1u.github.io/UltraFlash/"><b>Project Page</b></a> |
-  <a href="https://github.com/xin1u/UltraFlash"><b>Code (GitHub)</b></a> |
-  <a href="https://huggingface.co/xin1u/UltraFlash"><b>Models (HuggingFace)</b></a>
-</p>
+# ⚡ Ultra Flash
 
----
+**Scaling Real-Time Streaming Video Generation to High Resolutions**
+
+<a href="https://arxiv.org/pdf/2606.09150"><img src="https://img.shields.io/badge/arXiv-Paper-red?logo=arxiv"></a> &nbsp;
+<a href="https://xin1u.github.io/UltraFlash/"><img src="https://img.shields.io/badge/Project-Page-Green"></a> &nbsp;
+<a href="https://huggingface.co/xin1u/UltraFlash"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-blue"></a> &nbsp;
+<a href="inference/LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-lightgrey.svg"></a>
+
+**1K video at ~30 FPS &nbsp;·&nbsp; 2K video at ~18 FPS &nbsp;·&nbsp; single GPU**
+
+</div>
 
 <p align="center">
   <img src="assets/show1.png" width="100%">
@@ -21,31 +22,38 @@
 
 **Ultra Flash** is the first framework to achieve **real-time high-resolution streaming video generation**, producing **1K video at ~30 FPS** and **2K video at ~18 FPS** on a single GPU. It cascades three key components after a low-resolution streaming generator:
 
-1. **Architecture-Preserving T2V-to-TV2V SR Training** with AIGC-oriented degradation
-2. **Causal Streaming Latent Upsampler** (~2M params, <5% overhead)
-3. **Cascaded Streaming Optimization** (sparse distillation + DPO + dynamic cache management)
+1. 🎯 **Architecture-Preserving T2V-to-TV2V SR Training** with AIGC-oriented degradation
+2. 🪶 **Causal Streaming Latent Upsampler** (~2M params, <5% overhead)
+3. 🚄 **Cascaded Streaming Optimization** (sparse distillation + DPO + dynamic cache management)
 
 ---
 
-## News
+### 📰 News
 
-- **Aug 2026 — Inference code and checkpoints released** on GitHub and [Hugging Face](https://huggingface.co/xin1u/UltraFlash). 🎉
+- **Aug 2026 — Inference code and checkpoints released** on GitHub and
+  [Hugging Face](https://huggingface.co/xin1u/UltraFlash). 🎉
 
-## TODO
+---
+
+### 📋 TODO
 
 - ✅ Release inference code and checkpoints (short + long video)
 - ⬜ Release training code and configs
 
 ---
 
-## Requirements
+### 🔧 Requirements
 
 - NVIDIA GPU with **24+ GB** memory (RTX 4090, H200, B200 tested)
 - Linux operating system
 - 64 GB RAM
 - Python 3.10+
 
-## Installation
+---
+
+### 🚀 Getting Started
+
+#### 1️⃣ Installation
 
 ```bash
 conda create -n ultraflash python=3.10 -y
@@ -63,17 +71,17 @@ cd ..
 python setup.py develop
 ```
 
-## Download Checkpoints
+#### 2️⃣ Download Checkpoints
 
 ```bash
 # Wan2.1-T2V-1.3B base model
 huggingface-cli download Wan-AI/Wan2.1-T2V-1.3B --local-dir inference/wan_models/Wan2.1-T2V-1.3B
 
 # Ultra Flash checkpoints (short video)
-huggingface-cli download YOUR_ORG/UltraFlash --local-dir inference/checkpoints
+huggingface-cli download xin1u/UltraFlash --local-dir inference/checkpoints
 
 # Ultra Flash checkpoints (long video, optional)
-huggingface-cli download YOUR_ORG/UltraFlash-Long --local-dir inference_long/checkpoints
+huggingface-cli download xin1u/UltraFlash-Long --local-dir inference_long/checkpoints
 
 # Symlink shared checkpoints to avoid duplication (optional)
 cd inference_long/checkpoints
@@ -85,6 +93,7 @@ ln -s ../../inference/wan_models wan_models
 ```
 
 The `inference/checkpoints/` folder should contain:
+
 | File | Description |
 |------|-------------|
 | `self_forcing_dmd.pt` | Self-Forcing 4-step streaming generator |
@@ -93,15 +102,17 @@ The `inference/checkpoints/` folder should contain:
 | `tiny_decoder.pth` | Tiny Decoder for high-resolution decoding |
 | `ultra_decoder_v3.pth` | **(Optional)** Ultra Decoder V3 — improved HR decoder with better texture fidelity |
 
-## Quick Start
+#### 3️⃣ Quick Start
 
-### One-click inference (2K or 1K)
+**One-click inference (2K or 1K):**
+
 ```bash
 cd inference
 bash inference.sh
 ```
 
-### Custom inference
+**Custom inference:**
+
 ```bash
 cd inference
 python inference.py \
@@ -115,7 +126,8 @@ python inference.py \
     --compile_sr_dit
 ```
 
-### LR-only mode (480P, for comparison)
+**LR-only mode (480P, for comparison):**
+
 ```bash
 cd inference
 python inference.py \
@@ -127,11 +139,13 @@ python inference.py \
     --lr_only
 ```
 
-## Long Video Generation
+---
+
+### 🎬 Long Video Generation
 
 The `inference_long/` directory supports long video generation (~10 seconds, 120 latent frames) using **LongLive** with LoRA adapters and the same SR cascade pipeline.
 
-### Additional checkpoints for long video
+#### Additional checkpoints for long video
 
 The `inference_long/checkpoints/` folder requires:
 
@@ -143,7 +157,8 @@ The `inference_long/checkpoints/` folder requires:
 | `latent_upsampler.pth` | Same as `inference/` — can be symlinked |
 | `tiny_decoder.pth` | Same as `inference/` — can be symlinked |
 
-### Run long video inference
+#### Run long video inference
+
 ```bash
 cd inference_long
 python inference_sr.py \
@@ -154,9 +169,11 @@ python inference_sr.py \
     --compile_sr_dit
 ```
 
-## Key Arguments
+---
 
-### Short video (`inference/inference.py`)
+### ⚙️ Key Arguments
+
+#### Short video (`inference/inference.py`)
 
 | Argument | Default | Description |
 |----------|---------|-------------|
@@ -179,7 +196,7 @@ python inference_sr.py \
 | `--dcm_adaptive_refresh` | False | Enable IQA-based adaptive cache refresh |
 | `--no_dcm` | False | Disable all DCM optimizations |
 
-### Long video (`inference_long/inference_sr.py`)
+#### Long video (`inference_long/inference_sr.py`)
 
 Inherits most arguments from the YAML config. Key CLI overrides:
 
@@ -193,7 +210,9 @@ Inherits most arguments from the YAML config. Key CLI overrides:
 | `--fp8` | False | FP8 quantization for SF DiT |
 | `--fp8_sr` | False | FP8 quantization for SR DiT |
 
-## Dynamic Cache Management (DCM)
+---
+
+### 🧠 Dynamic Cache Management (DCM)
 
 Ultra Flash introduces three inference-time optimizations:
 
@@ -203,7 +222,9 @@ Ultra Flash introduces three inference-time optimizations:
 | **(ii) Adaptive Cache Refresh** | Skips context rerun when quality is sufficient | Negligible |
 | **(iii) SR Cache Adaptation** | Reduces SR KV cache memory over time | Minimal |
 
-## Architecture
+---
+
+### 🏗️ Architecture
 
 ```
 Text Prompt
@@ -236,22 +257,15 @@ Text Prompt
        2K Video Output (~18 FPS)
 ```
 
-## Training
+---
+
+### 🏋️ Training
 
 Training code is coming soon. See the `train/` directory for updates.
 
-## Citation
+---
 
-```bibtex
-@inproceedings{luxury2026ultraflash,
-  title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
-  author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Zhuang, Jun-hao and Xue, Zeyue and Fu, Siming and Li, Haoran and Zhong, Mingchen and Zhang, Guohui and Ma, Shichen and Liu, Yijun and Shi, Jiaqi and Ma, Yanwen and Su, Yaofeng and Wang, Haoyu and Li, Yaowei and Zhang, Songchun and Jin, Weiyang and Bian, Yuxuan and Zhang, Shiyi and Xu, Haojun and Lu, Shuai and Han, Xin and Tang, Wei and Huang, Haoyang and Duan, Nan},
-  booktitle={arXiv preprint},
-  year={2026}
-}
-```
-
-## Acknowledgements
+### 🤗 Acknowledgements
 
 This work builds upon the following excellent open-source projects:
 
@@ -262,10 +276,27 @@ This work builds upon the following excellent open-source projects:
 
 We thank the authors for their outstanding contributions to the community.
 
-## Contact
+---
+
+### 📞 Contact
 
 Please feel free to contact us if there is any question (luxion@mail.ustc.edu.cn).
 
-## License
+---
+
+### 📜 Citation
+
+```bibtex
+@inproceedings{luxury2026ultraflash,
+  title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
+  author={Luxury and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Zhuang, Jun-hao and Xue, Zeyue and Fu, Siming and Li, Haoran and Zhong, Mingchen and Zhang, Guohui and Ma, Shichen and Liu, Yijun and Shi, Jiaqi and Ma, Yanwen and Su, Yaofeng and Wang, Haoyu and Li, Yaowei and Zhang, Songchun and Jin, Weiyang and Bian, Yuxuan and Zhang, Shiyi and Xu, Haojun and Lu, Shuai and Han, Xin and Tang, Wei and Huang, Haoyang and Duan, Nan},
+  booktitle={arXiv preprint},
+  year={2026}
+}
+```
+
+---
+
+### 📄 License
 
 This project is released under the [Apache 2.0 License](inference/LICENSE).
