@@ -27,6 +27,17 @@
 
 ---
 
+## News
+
+- **Aug 2026 — Inference code and checkpoints released** on GitHub and [Hugging Face](https://huggingface.co/xin1u/UltraFlash). 🎉
+
+## TODO
+
+- ✅ Release inference code and checkpoints (short + long video)
+- ⬜ Release training code and configs
+
+---
+
 ## Requirements
 
 - NVIDIA GPU with **24+ GB** memory (RTX 4090, H200, B200 tested)
@@ -250,6 +261,10 @@ This work builds upon the following excellent open-source projects:
 - [Wan2.1](https://github.com/Wan-Video/Wan2.1) — Video DiT foundation model
 
 We thank the authors for their outstanding contributions to the community.
+
+## Contact
+
+Please feel free to contact us if there is any question (luxion@mail.ustc.edu.cn).
 
 ## License
 
