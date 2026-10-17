@@ -289,7 +289,7 @@ Please feel free to contact us if there is any question (luxion@mail.ustc.edu.cn
 ```bibtex
 @inproceedings{luxury2026ultraflash,
   title={Ultra Flash: Scaling Real-Time Streaming Video Generation to High Resolutions},
-  author={Lu, Xin and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Zhuang, Jun-hao and Xue, Zeyue and Fu, Siming and Li, Haoran and Zhong, Mingchen and Zhang, Guohui and Ma, Shichen and Liu, Yijun and Shi, Jiaqi and Ma, Yanwen and Su, Yaofeng and Wang, Haoyu and Li, Yaowei and Zhang, Songchun and Jin, Weiyang and Bian, Yuxuan and Zhang, Shiyi and Xu, Haojun and Lu, Shuai and Han, Xin and Tang, Wei and Huang, Haoyang and Duan, Nan},
+  author={Lu, Xin and Huang, Jie and Fan, Zihao and Ma, Xiaoxiao and Li, Yuming and Zhuang, Jun-hao and Xue, Zeyue and Fu, Siming and Li, Haoran and Zhong, Mingchen and Zhang, Guohui and Ma, Shichen and Liu, Yijun and Shi, Jiaqi and Ma, Yanwen and Su, Yaofeng and Wang, Haoyu and Li, Yaowei and Zhang, Songchun and Jin, Weiyang and Bian, Yuxuan and Zhang, Shiyi and Xu, Haojun and Lu, Shuai and Han, Xin and Tang, Wei and Huang, Haoyang and Duan, Nan and Fu, Xueyang},
   booktitle={arXiv preprint},
   year={2026}
 }
